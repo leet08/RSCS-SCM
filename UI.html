@@ -130,8 +130,8 @@
 
     // import header data here
     // example data
-    var example_headers = ["Survey Location:", "Survey Date:", "Survey Equipment:", "Surveyor(s):"]
-    var example_data = ["HANGER 5", "July 12, 2017", "SCM9", "THROWER / GOTHERMAN"]
+    var example_headers = ["Survey Location:", "Survey Date:", "Survey Equipment:", "Surveyor(s):", "Detector(s):"]
+    var example_data = ["HANGER 5", "July 12, 2017", "SCM9", "THROWER / GOTHERMAN","R180"]
 
     // create the survey information table dynamically
     function generate_table(headers, data) {
@@ -147,7 +147,7 @@
         // creates a table row
         var row = document.createElement("tr");
 
-        for (var j = 0; j < 4; j++) {
+        for (var j = 0; j < 5; j++) {
           // Create a <td> element and a text node, make the text
           // node the contents of the <td>, and put the <td> at
           // the end of the table row
@@ -180,7 +180,7 @@
 </header><br>
 <section>
   <div class="box1" id="box1">
-    <img src="https://leet08.github.io/RSCS-SCM/static/img/survey map example.png" width="150" height="200" id = "mapImage">
+    <img src="https://leet08.github.io/RSCS-SCM/static/img/survey map example.png" width="300" height="600" id = "mapImage">
   </div>
   <div class="box2">
     <div id="status">
@@ -189,7 +189,7 @@
       -
     </div><br>
     <div class="strip" id="test">
-      <img src="https://leet08.github.io/RSCS-SCM/static/img/example strip data1.png" width="50" height="60" id="img">
+      <img src="https://leet08.github.io/RSCS-SCM/static/img/example strip data1.png" width="50" height="100" id="img">
     </div>
   </div>
 </section><br>
