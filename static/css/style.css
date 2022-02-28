@@ -15,7 +15,9 @@ section::after {
   top: 200px;
   width: 75%;
   float: left;
-  padding: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 200px;
   display: block;
   margin-left: auto;
   margin-right: auto;
