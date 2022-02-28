@@ -31,8 +31,8 @@
         imgOverlay.src =
           'https://leet08.github.io/RSCS-SCM/static/img/example strip data1.png';
         imgOverlay.id = imgId;
-        imgOverlay.height = 50;
-        imgOverlay.width = 50;
+        imgOverlay.height = document.getElementById(stripId).height;
+        imgOverlay.width = document.getElementById(stripId).width;
         document.getElementById('box1').appendChild(imgOverlay);
         imgOverlay.style.position = 'absolute';
       }
