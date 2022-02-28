@@ -1,0 +1,196 @@
+<header>
+  <h1>
+    Survey Report 351A_SU1_A_F_R_001_00
+  </h1>
+  <script>
+    // on window load, add click listeners to survey map and to all strips
+    window.onload = function() {
+      strips = document.querySelectorAll(".strip");
+      strips.forEach(function(item) {
+        item.addEventListener("click", selectStrip);
+      })
+      map = document.getElementById("box1");
+      map.addEventListener("click", selectMap);
+    }
+
+    // function when strip is first selected for placement
+    function selectStrip() {
+      stripId = this.id;
+      // change border color to indicate selection
+      document.getElementById(stripId).style.border = "2px red solid";
+      // flag strip is selected and change text
+      document.getElementById("status").innerHTML = "Placing strip: "
+      document.getElementById("status2").innerHTML = this.id
+
+      // create hovering overlay image if it doesn't exist already
+      let imgId = "overlay" + stripId;
+      if (document.getElementById(imgId) == null) {
+        var imgOverlay = document.createElement('img');
+        imgOverlay.src =
+          'https://media.geeksforgeeks.org/wp-content/uploads/20190529122828/bs21.png';
+        imgOverlay.id = imgId;
+        imgOverlay.height = 50;
+        imgOverlay.width = 50;
+        document.getElementById('box1').appendChild(imgOverlay);
+        imgOverlay.style.position = 'absolute';
+      }
+
+      // add new listener that checks mouse location
+      document.addEventListener("mousemove", getMouse);
+      // start function that allows hovering overlay image at mouse position
+      window.interval = setInterval(followMouse, 50);
+      return;
+    }
+
+    // initialize mouse position
+    var mouse = {
+      x: 0,
+      y: 0
+    };
+
+    // get current mouse position during mouseover
+    function getMouse(e) {
+      mouse.x = e.pageX;
+      mouse.y = e.pageY;
+      //console.log(mouse.x + ", " + mouse.y)
+    }
+
+    // function to display image overlay prior to placement on survey map
+    function followMouse() {
+      let stripId = document.getElementById("status2").innerHTML;
+      let imgId = "overlay" + stripId;
+      //console.log(imgId);
+      var imgOverlay = document.getElementById(imgId);
+      //console.log(imgId);
+      imgOverlay.style.position = "absolute"; //css
+      // change opacity to 50% to you can still see the map
+      imgOverlay.style.opacity = "0.5";
+
+      // place the hover overlay at the mouse position
+      imgOverlay.style.left = mouse.x + "px";
+      imgOverlay.style.top = mouse.y + "px";
+    }
+
+    // function to place overlay image on the survey map
+    function selectMap(event) {
+      // check and run only if it's in the placement stage and within map area
+      let mapWidth = document.getElementById("box1").offsetWidth;
+      let mapHeight = document.getElementById("box1").offsetHeight;
+      let mapTop = document.getElementById("box1").offsetTop;
+      let mapLeft = document.getElementById("box1").offsetLeft;
+      
+      // get click location
+      var x = mouse.x;
+      var y = mouse.y;
+        
+      if (document.getElementById("status").innerHTML == "Placing strip: " && x > mapLeft && x < (mapLeft+mapWidth) && y > mapTop && y < (mapTop+mapHeight) ) {
+        
+        // place overlay
+        let stripId = document.getElementById("status2").innerHTML;
+        let imgId = "overlay" + stripId;
+        //console.log(imgId);
+        var imgOverlay = document.getElementById(imgId);
+        document.getElementById('box1').appendChild(imgOverlay);
+
+        imgOverlay.style.position = 'absolute';
+        imgOverlay.style.left = x + 'px';
+        imgOverlay.style.top = y + 'px';
+        // return opacity to original
+        imgOverlay.style.opacity = "1";
+
+        // end hover mouse listener and functions
+        document.removeEventListener("mousemove", getMouse);
+        clearInterval(window.interval);
+
+        // change border color to indicate selection
+        document.getElementById(stripId).style.border = "2px green solid";
+        // flag strip is selected and change text
+        document.getElementById("status").innerHTML = "Strip Data";
+        document.getElementById("status2").innerHTML = "-";
+
+        // write coordinates to output data in a new div if it doesn't exist already
+        // eventually this will be an output to an export file
+        // will need to translate absolute pixel location on the screen to the survey map depending on scale
+        let newDivId = "output" + stripId;
+        if (document.getElementById(newDivId) == null) {
+          let newDiv = document.createElement('div');
+          newDiv.id = newDivId;
+          newDiv.innerHTML = "Strip " + stripId + ": " + "(" + mouse.x + ", " + mouse.y + ")";
+          document.getElementById('outputData').appendChild(newDiv);
+        } else {
+          let newDiv = document.getElementById(newDivId);
+          newDiv.innerHTML = "Strip " + stripId + ": " + "(" + x + ", " + y + ")";
+
+        }
+        return;
+      }
+    }
+
+    // import header data here
+    // example data
+    var example_headers = ["Survey Location:", "Survey Date:", "Survey Equipment:", "Surveyor(s):"]
+    var example_data = ["HANGER 5", "July 12, 2017", "SCM9", "THROWER / GOTHERMAN"]
+
+    // create the survey information table dynamically
+    function generate_table(headers, data) {
+      // get the reference for the body
+      var body = document.getElementsByTagName("body")[0];
+
+      // creates a <table> element and a <tbody> element
+      var tbl = document.createElement("table");
+      var tblBody = document.createElement("tbody");
+
+      // creating all cells
+      for (var i = 0; i < 2; i++) {
+        // creates a table row
+        var row = document.createElement("tr");
+
+        for (var j = 0; j < 4; j++) {
+          // Create a <td> element and a text node, make the text
+          // node the contents of the <td>, and put the <td> at
+          // the end of the table row
+          var cell = document.createElement("td");
+          if (i == 0) {
+            var cellText = document.createTextNode(headers[j]);
+          } else {
+            var cellText = document.createTextNode(data[j]);
+          }
+          cell.appendChild(cellText);
+          row.appendChild(cell);
+        }
+
+        // add the row to the end of the table body
+        tblBody.appendChild(row);
+      }
+
+      // put the <tbody> in the <table>
+      tbl.appendChild(tblBody);
+      // appends <table> into <body>
+      body.appendChild(tbl);
+      // sets the border attribute of tbl to 2;
+      tbl.setAttribute("border", "2");
+    }
+
+    // create the table and append it
+    generate_table(example_headers, example_data);
+
+  </script>
+</header><br>
+<section>
+  <div class="box1" id="box1">
+    <img src="https://www.w3schools.com/images/w3schools_green.jpg" width="150" height="200" id = "mapImage">
+  </div>
+  <div class="box2">
+    <div id="status">
+      Strip Data<br></div>
+    <div id="status2">
+      -
+    </div><br>
+    <div class="strip" id="test">
+      <img src="https://www.w3schools.com/images/w3schools_green.jpg" width="50" height="60" id="img">
+    </div>
+  </div>
+</section><br>
+<section id="outputData">
+  Output Data
+</section>
