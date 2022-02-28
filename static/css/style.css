@@ -15,8 +15,8 @@ section::after {
   top: 200px;
   width: 75%;
   float: left;
-  padding-left: 30px;
-  padding-top: 30px;
+  padding-left: 10px;
+  padding-top: 10px;
   overflow: hidden; 
   border: 2px black solid;
 }
